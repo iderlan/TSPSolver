@@ -507,6 +507,11 @@
                 return { x, y };
             });
 
+            const numCities = cities.length;
+
+            // Adiciona essa linha para garantir a escolha automática do algoritmo ao resolver
+            setAlgorithmBasedOnCities(instanceIndex, numCities);
+
             let result;
             const selectedAlgorithm = document.getElementById(`algorithm${instanceIndex}`).value;
 
@@ -521,8 +526,9 @@
             const canvas = document.getElementById(`map${instanceIndex}`);
             drawMap(canvas, cities, result.bestPath);
 
-            document.getElementById(`result${instanceIndex}`).textContent = `Custo do melhor caminho: ${result.minCost}`;
+            document.getElementById(`result${instanceIndex}`).textContent = `Custo do caminho: ${result.minCost}`;
         }
+
 
         function clearMap(canvas) {
             const ctx = canvas.getContext('2d');
