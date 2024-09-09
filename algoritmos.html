@@ -37,6 +37,13 @@
             max-width: 800px;
             text-align: justify;
         }
+        li {
+            font-size: 1em;
+            color: #555;
+            line-height: 1.6;
+            max-width: 800px;
+            text-align: justify;
+        }
 
         nav {
             background-color: #007bff;
@@ -78,6 +85,43 @@
             text-align: left;
         }
 
+        .example {
+            display: none;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .example p {
+            font-size: 1em;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .example-code {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            margin-top: 10px;
+        }
+
+        .toggle-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .toggle-button:hover {
+            background-color: #0056b3;
+        }
+
         @media (max-width: 700px) {
               nav ul li a {
                   padding: 10px 10px;
@@ -98,20 +142,84 @@
     <h1>Algoritmos de Resolução do Problema do Caixeiro Viajante</h1>
 
     <div class="container">
+        <!-- Seção Held-Karp -->
         <h2>Held-Karp</h2>
+        <h3>Resumo</h3>
         <p>
-            O algoritmo Held-Karp resolve o problema do caixeiro viajante usando programação dinâmica. Ele considera todas as cidades e calcula o caminho ótimo ao armazenar subproblemas menores em uma tabela. A principal vantagem do Held-Karp é que ele garante a solução ótima, mas sua desvantagem é que é computacionalmente pesado para um grande número de cidades, com uma complexidade de tempo de O(2^n * n²), onde n é o número de cidades.
+            O algoritmo de Held-Karp é uma solução exata para o Problema do Caixeiro Viajante, baseado em programação dinâmica. Ele calcula a rota de menor custo que visita todas as cidades uma única vez, garantindo a solução ótima, mas com um alto custo computacional em instâncias grandes.
         </p>
 
+        <h3>Funcionamento</h3>
+        <p>
+            O Held-Karp utiliza uma tabela de resultados intermediários para calcular a menor distância possível entre subconjuntos de cidades. Começando de uma cidade inicial, ele calcula a rota mínima para um subconjunto de cidades e armazena essa informação. À medida que mais cidades são incluídas, ele utiliza os resultados já calculados para otimizar o processo.
+        </p>
+        <p>
+            A complexidade do algoritmo é <strong>exponencial</strong>, com O(2^n * n^2), o que significa que ele se torna impraticável para problemas com muitas cidades, mas é muito eficiente para instâncias menores.
+        </p>
+
+        <h3>Exemplo</h3>
+        <p>
+            Este exemplo é uma simplificação muito raza, pois é inviável esplicar profundamente o funcionamento, que é mais complexo do que parece.
+        </p>
+        <p>
+            Suponha que temos quatro cidades: A, B, C e D. O Held-Karp calcula a rota ótima considerando todas as permutações possíveis dessas cidades. Veja o processo:
+        </p>
+        <ol>
+            <li>Começamos com as rotas menores, como {A, B}, {A, C}, e calculamos a menor distância para esses subconjuntos.</li>
+            <li>Em seguida, adicionamos mais cidades, por exemplo, {A, B, C}, e usamos os resultados anteriores para calcular a melhor rota.</li>
+            <li>Continuamos até que todas as cidades sejam incluídas. A rota final será a de menor custo que visita todas as cidades e retorna à origem.</li>
+        </ol>
+
+        <!-- Seção Inserção Mais Barata -->
         <h2>Inserção Mais Barata</h2>
+        <h3>Resumo</h3>
         <p>
-            A heurística da Inserção Mais Barata é uma abordagem mais simples e rápida que constrói a solução adicionando cidades uma por uma no caminho, sempre inserindo a próxima cidade no local que causa o menor aumento no custo total. Embora não garanta a solução ótima, é eficiente para um número maior de cidades, sendo útil para instâncias de até 500 cidades.
+            O algoritmo de Inserção Mais Barata é uma solução heurística que constrói a rota gradualmente. Ele insere as cidades uma por uma no local onde a inserção causa o menor aumento no custo total da rota.
         </p>
 
-        <h2>Vizinho Mais Próximo</h2>
+        <h3>Funcionamento</h3>
         <p>
-            O algoritmo do Vizinho Mais Próximo também é uma heurística. Ele começa em uma cidade aleatória e vai construindo a rota escolhendo a cidade mais próxima que ainda não foi visitada. Esse método é rápido e fácil de implementar, mas não garante a solução ótima. É ideal para situações em que é preciso uma solução rapidamente para um grande número de cidades, como 500 ou mais.
+            O algoritmo começa com uma rota simples entre duas cidades e vai inserindo outras cidades entre as já visitadas. Para cada cidade a ser inserida, o algoritmo testa em quais pontos da rota existente a nova cidade pode ser inserida, calculando o aumento no comprimento da rota. A cidade é então inserida no ponto que aumenta o custo o mínimo possível.
         </p>
+
+        <h3>Exemplo</h3>
+        <p>
+            Considere as cidades A, B, C, D e E. Veja como o algoritmo funciona:
+        </p>
+        <ol>
+            <li>Começamos com a rota A → B → C → A.</li>
+            <li>Depois, inserimos a cidade D. Testamos todas as possíveis inserções, são elas:</li>
+                <ol>
+                    <li>entre A e B: A → D → B → C → A.</li>
+                    <li>entre B e C: A → B → D → C → A.</li>
+                    <li>entre C e A: A → B → C → D → A.</li>
+                </ol>
+            <li>Escolhemos aquela que possui menor almento de custo, e continua para as outras cidades que ainda não foram visitadas</li>
+        </ol>
+
+        <!-- Seção Vizinho Mais Próximo -->
+        <h2>Vizinho Mais Próximo</h2>
+        <h3>Resumo</h3>
+        <p>
+            O algoritmo de Vizinho Mais Próximo é uma abordagem heurística que sempre escolhe a cidade mais próxima que ainda não foi visitada. Ele é simples e rápido, mas não garante a solução ótima.
+        </p>
+
+        <h3>Funcionamento</h3>
+        <p>
+            O algoritmo começa em uma cidade qualquer e, a cada passo, escolhe a cidade mais próxima que ainda não foi visitada. Esse processo continua até que todas as cidades tenham sido visitadas. No final, a rota é fechada retornando à cidade de origem.
+        </p>
+
+        <h3>Exemplo</h3>
+        <p>
+            Se temos quatro cidades A, B, C e D, o algoritmo segue os seguintes passos:
+        </p>
+        <ol>
+            <li>Começamos na cidade A.</li>
+            <li>Escolhemos a cidade mais próxima de A, digamos B.</li>
+            <li>A partir de B, escolhemos a próxima cidade mais próxima, por exemplo C.</li>
+            <li>Continuamos até visitar todas as cidades e, por fim, retornamos à cidade inicial A.</li>
+        </ol>
     </div>
 </body>
+
 </html>
