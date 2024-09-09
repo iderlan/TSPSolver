@@ -52,6 +52,6 @@ Este projeto é uma aplicação web que resolve o famoso Problema do Caixeiro-Vi
 - [Problema do Caixeiro-Viajante - Wikipedia](https://pt.wikipedia.org/wiki/Problema_do_caixeiro-viajante)
 
 ## Contato
-  Nome: Iderlan Matheus Nascimento Cardoso
-  perfil do GitHub: (https://github.com/iderlan) 
-  email: iderlan2001@gmail.com
+ - Nome: Iderlan Matheus Nascimento Cardoso.
+ - perfil do GitHub: (https://github.com/iderlan) .
+ - email: iderlan2001@gmail.com.
