@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problema do Caixeiro-Viajante</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 1.3em;
+            color: #333;
+            text-align: center;
+            margin: 30px 0;
+            letter-spacing: 1px;
+        }
+        h2 {
+            font-size: 1.3em;
+        }
+
+        nav {
+            background-color: #007bff;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.8em;
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        nav ul li:hover .tooltip {
+            display: block;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            white-space: nowrap;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 0.9em;
+            width: 70px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background-color: #007bff;
+            color: white;
+            font-size: 0.7em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            outline: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .map-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            margin: 10px 0;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        #instances {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .instance-container {
+            position: relative;
+            margin-bottom: 30px;
+            width: 405px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-left: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            height: 55px; 
+            width: 378px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #007bff;
+        }
+
+        .result-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .result {
+            font-size: 0.7em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .export-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .export-buttons button {
+            padding: 8px 15px;
+            background-color: #28a745;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .export-buttons button:hover {
+            background-color: #218838;
+        }
+
+        .button-remove {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .button-remove:hover {
+            background-color: #c82333;
+        }
+
+        /* Estilizando o combobox */
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            background-color: #f4f7f9;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+            cursor: pointer;
+            width: 200px;
+            appearance: none; /* Remove o estilo padrão */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+        }
+
+        select:hover {
+            border-color: #007bff;
+        }
+
+        select:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Estilizando o checkbox */
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            cursor: pointer;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        input[type="checkbox"]::after {
+            position: absolute;
+            width: 8px;
+            height: 14px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        input[type="checkbox"]:checked::after {
+            display: block;
+        }
+
+        /* Efeitos de hover e foco para o checkbox */
+        input[type="checkbox"]:hover {
+            border-color: #007bff
+        }
+        @media (max-width: 700px) {
+              .instance-container {
+                    width: 280px;
+                    margin-left: 5px;
+                    margin-right: 5px;
+              }
+              textarea {
+                  height: 68px; 
+                  width: 263px;
+              }
+              .map-container {
+                  position: relative;
+                  width: 275px;
+                  height: 275px;
+              }
+              nav ul li a {
+                  padding: 10px 10px;
+               }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="https://pt.wikipedia.org/wiki/Problema_do_caixeiro-viajante" target="_blank">Problema</a></li>
+            <li><a href="https://github.com/iderlan" target="_blank">Contato</a></li>
+            <li><a href="algoritmos.html">Algoritmos</a></li>
+        </ul>
+    </nav>
+
+    <h1>Problema do Caixeiro-Viajante</h1>
+
+    <button onclick="addInstance()">+</button>
+
+    <div id="instances"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="held-karp.js"></script>
+    <script src="insercao-mais-barata.js"></script>
+    <script src="vizinho-mais-proximo.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            addInstance(); // Adiciona uma instância inicial vazia
+        });
+
+        function createInstance(index) {
+            const instancesContainer = document.getElementById('instances');
+            const instanceContainer = document.createElement('div');
+            instanceContainer.className = 'instance-container';
+            instanceContainer.id = `instance${index}`;
+            instanceContainer.innerHTML = `
+                <h2>Mapa ${index + 1}</h2>
+                <div class="form-group">
+                    <label for="numCities${index}">N&uacute;mero de cidades:</label>
+                    <input type="number" id="numCities${index}" value="5" min="1">
+                    <button onclick="generateRandomCities(${index})">Gerar cidades aleat&oacute;rias</button>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="autoChoose${index}" checked onclick="toggleAlgorithmChoice(${index})">
+                    <label for="autoChoose${index}">Escolha automática do algoritmo</label>
+                    <select id="algorithm${index}" disabled>
+                        <option value="held-karp">Held-Karp</option>
+                        <option value="insercao-mais-barata">Inserção Mais Barata</option>
+                        <option value="vizinho-mais-proximo">Vizinho Mais Próximo</option>
+                    </select>
+                </div>
+                <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
+                <textarea id="cities${index}" rows="5" cols="50" placeholder="Digite as coordenadas, separado por espaços ou por quebra de linha (formato: x,y x,y). Exemplo:\n558,254 428,290\n56,265 147,224 19,154"></textarea>
+                <div class="result-container">
+                    <button onclick="solveTSP(${index})">Resolver</button>
+                    <span id="result${index}" class="result"></span>
+                </div>
+                <div class="map-container">
+                    <canvas id="map${index}" width="600" height="600"></canvas>
+                </div>
+                <div class="export-buttons">
+                    <button class="button" onclick="exportToTxt(${index})">Exportar para TXT</button>
+                    <button class="button" onclick="exportToExcel(${index})">Exportar para Excel</button>
+                </div>
+                <button class="button-remove" onclick="removeInstance(${index})">-</button>
+            `;
+            instancesContainer.appendChild(instanceContainer);
+
+            // Inicializa o mapa vazio
+            const canvas = document.getElementById(`map${index}`);
+            clearMap(canvas); // Limpa o mapa ao criar a instância
+
+            // Se houver dados armazenados, redesenha o mapa
+            if (window[`instanceData${index}`]) {
+                const { cities, path } = window[`instanceData${index}`];
+                drawMap(canvas, cities, path);
+            }
+        }
+
+        function addInstance() {
+            const numInstances = document.getElementById('instances').children.length;
+            createInstance(numInstances);
+        }
+
+        function toggleAlgorithmChoice(index) {
+            const autoChoose = document.getElementById(`autoChoose${index}`).checked;
+            const algorithmSelect = document.getElementById(`algorithm${index}`);
+            algorithmSelect.disabled = autoChoose;
+        }
+
+
+        function generateRandomCities(instanceIndex) {
+            const numCities = parseInt(document.getElementById(`numCities${instanceIndex}`).value);
+            const cities = [];
+
+            for (let i = 0; i < numCities; i++) {
+                const x = Math.floor(Math.random() * 600);
+                const y = Math.floor(Math.random() * 600);
+                cities.push({ x, y });
+            }
+
+            const citiesText = cities.map(city => `${city.x},${city.y}`).join('\n');
+            document.getElementById(`cities${instanceIndex}`).value = citiesText;
+
+            // Escolher algoritmo com base no número de cidades
+            setAlgorithmBasedOnCities(instanceIndex, numCities);
+
+            solveTSP(instanceIndex);  // Resolver automaticamente após gerar cidades aleatórias
+        }
+
+        function setAlgorithmBasedOnCities(instanceIndex, numCities) {
+            const autoChoose = document.getElementById(`autoChoose${instanceIndex}`).checked;
+            const algorithmSelect = document.getElementById(`algorithm${instanceIndex}`);
+
+            if (autoChoose) {
+                if (numCities <= 20) {
+                    algorithmSelect.value = 'held-karp';  // Held-Karp para <= 20 cidades
+                } else if (numCities <= 500) {
+                    algorithmSelect.value = 'insercao-mais-barata';  // Inserção mais barata para <= 500 cidades
+                } else {
+                    algorithmSelect.value = 'vizinho-mais-proximo';  // Vizinho mais próximo para > 500 cidades
+                }
+            }
+        }
+
+        function updateInstances() {
+            const instancesContainer = document.getElementById('instances');
+            const instances = instancesContainer.getElementsByClassName('instance-container');
+            const data = [];
+
+            // Guarda os dados atuais das instâncias
+            for (let i = 0; i < instances.length; i++) {
+                const textArea = instances[i].querySelector('textarea');
+                const resultSpan = instances[i].querySelector('.result');
+                const canvasId = `map${i}`;
+                const canvas = document.getElementById(canvasId);
+
+                // Obtém o contexto do canvas para salvar a imagem atual
+                const context = canvas.getContext('2d');
+                const canvasDataURL = canvas.toDataURL(); // Salva o estado atual do canvas como uma imagem
+
+                data.push({
+                    text: textArea.value,
+                    mapData: window[`instanceData${i}`], // Salva os dados do mapa (cidades e caminho)
+                    result: resultSpan.textContent, // Salva o resultado do cálculo
+                    canvasDataURL: canvasDataURL // Salva o estado atual do canvas
+                });
+            }
+
+            // Limpa todas as instâncias e recria com os índices atualizados
+            instancesContainer.innerHTML = '';
+
+            for (let i = 0; i < data.length; i++) {
+                createInstance(i); // Cria a nova instância
+                document.getElementById(`cities${i}`).value = data[i].text; // Reinsere os dados antigos
+                window[`instanceData${i}`] = data[i].mapData; // Restaura os dados do mapa
+
+                // Restaura o resultado se houver
+                if (data[i].result) {
+                    const resultSpan = document.getElementById(`result${i}`);
+                    resultSpan.textContent = data[i].result;
+                }
+
+                // Restaura o canvas com os dados anteriores
+                const canvas = document.getElementById(`map${i}`);
+                const context = canvas.getContext('2d');
+                const img = new Image();
+        
+                img.onload = function() {
+                    context.drawImage(img, 0, 0); // Desenha a imagem salva no canvas
+                };
+                img.src = data[i].canvasDataURL; // Carrega a imagem salva
+
+                // Redesenha o mapa se houver dados armazenados (para garantir que sempre será desenhado)
+                if (window[`instanceData${i}`]) {
+                    const { cities, path } = window[`instanceData${i}`];
+                    drawMap(canvas, cities, path);
+                }
+            }
+        }
+
+        function solveTSP(instanceIndex) {
+            const citiesInput = document.getElementById(`cities${instanceIndex}`).value.trim();
+            const validFormat = /^(\d+,\d+)([\n\s]+(\d+,\d+))*$/;
+            const errorMessage = document.getElementById('error-message');
+
+            if (!validFormat.test(citiesInput)) {
+                errorMessage.textContent = "Entrada inválida, verifique se as coordenadas estão no formato correto.";
+                return;
+            } else {
+                errorMessage.textContent = '';
+            }
+
+            const cities = citiesInput.split(/[\n\s]+/).map(line => {
+                const [x, y] = line.split(',').map(Number);
+                return { x, y };
+            });
+
+            let result;
+            const selectedAlgorithm = document.getElementById(`algorithm${instanceIndex}`).value;
+
+            if (selectedAlgorithm === 'held-karp') {
+                result = heldKarp(cities);
+            } else if (selectedAlgorithm === 'insercao-mais-barata') {
+                result = cheapestInsertionHeuristic(cities);
+            } else if (selectedAlgorithm === 'vizinho-mais-proximo') {
+                result = nearestNeighbor(cities);
+            }
+
+            const canvas = document.getElementById(`map${instanceIndex}`);
+            drawMap(canvas, cities, result.bestPath);
+
+            document.getElementById(`result${instanceIndex}`).textContent = `Custo do melhor caminho: ${result.minCost}`;
+        }
+
+        function clearMap(canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function removeInstance(index) {
+            const instanceContainer = document.getElementById(`instance${index}`);
+    
+            // Remove a instância do DOM
+            if (instanceContainer) {
+                instanceContainer.remove();
+            }
+    
+            // Remove os dados associados à instância
+            delete window[`instanceData${index}`];
+    
+            // Renumerar as instâncias remanescentes
+            const instancesContainer = document.getElementById('instances');
+            const remainingInstances = instancesContainer.getElementsByClassName('instance-container');
+    
+            for (let i = 0; i < remainingInstances.length; i++) {
+                const oldIndex = remainingInstances[i].id.replace('instance', '');
+                const newIndex = i;
+
+                remainingInstances[i].id = `instance${newIndex}`;
+                remainingInstances[i].querySelector('h2').innerText = `Mapa ${newIndex + 1}`;
+                remainingInstances[i].querySelector('.form-group label').setAttribute('for', `numCities${newIndex}`);
+                remainingInstances[i].querySelector('.form-group input').id = `numCities${newIndex}`;
+                remainingInstances[i].querySelector('.form-group button').setAttribute('onclick', `generateRandomCities(${newIndex})`);
+                remainingInstances[i].querySelector('textarea').id = `cities${newIndex}`;
+                remainingInstances[i].querySelector('.result-container button').setAttribute('onclick', `solveTSP(${newIndex})`);
+                remainingInstances[i].querySelector('.result-container span').id = `result${newIndex}`;
+                remainingInstances[i].querySelector('.map-container canvas').id = `map${newIndex}`;
+                remainingInstances[i].querySelector('.export-buttons button:nth-child(1)').setAttribute('onclick', `exportToTxt(${newIndex})`);
+                remainingInstances[i].querySelector('.export-buttons button:nth-child(2)').setAttribute('onclick', `exportToExcel(${newIndex})`);
+                remainingInstances[i].querySelector('.button-remove').setAttribute('onclick', `removeInstance(${newIndex})`);
+
+                // Atualiza os dados associados à nova posição
+                window[`instanceData${newIndex}`] = window[`instanceData${oldIndex}`];
+                delete window[`instanceData${oldIndex}`];
+            }
+        }
+
+        function drawMap(canvas, cities, path) {
+            const ctx = canvas.getContext('2d');
+            let scale = 1;
+            let offsetX = 0;
+            let offsetY = 0;
+            let mouseX = 0;
+            let mouseY = 0;
+
+            const draw = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.save();
+                ctx.translate(offsetX, offsetY);
+                ctx.scale(scale, scale);
+
+                // Ajusta o tamanho dos pontos com base no número de cidades
+                const minPointSize = 1;
+                const maxPointSize = 7;
+                const pointSize = Math.max(minPointSize, Math.min(maxPointSize, 3000 / cities.length));
+
+                // Desenhar o caminho (linhas) com base no zoom
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = pointSize / 2;  // As linhas têm metade da grossura dos pontos
+                ctx.beginPath();
+                for (let i = 0; i < path.length; i++) {
+                    const city1 = cities[path[i]];
+                    const city2 = cities[path[(i + 1) % path.length]];
+                    ctx.moveTo(city1.x, city1.y);  // Não aplicar escala aqui
+                    ctx.lineTo(city2.x, city2.y);
+                }
+                ctx.stroke();
+
+                // Desenhar as cidades (círculos) com a mesma escala e translação
+                ctx.fillStyle = 'blue';
+                cities.forEach(city => {
+                    ctx.beginPath();
+                    ctx.arc(city.x, city.y, pointSize, 0, 2 * Math.PI);  // Os círculos são desenhados no mesmo sistema de coordenadas
+                    ctx.fill();
+                });
+
+                ctx.restore();
+            };
+
+            draw();
+
+            canvas.addEventListener('mousemove', (event) => {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = event.clientX - rect.left;
+                mouseY = event.clientY - rect.top;
+            });
+
+            canvas.addEventListener('wheel', (event) => {
+                const delta = -event.deltaY * 0.001;  // Ajuste a intensidade do zoom
+                const previousScale = scale;
+
+                scale = Math.max(0.5, Math.min(scale + delta, 10));
+
+                const mouseMapX = (mouseX - offsetX) / previousScale;
+                const mouseMapY = (mouseY - offsetY) / previousScale;
+
+                offsetX = mouseX - mouseMapX * scale;
+                offsetY = mouseY - mouseMapY * scale;
+
+                draw();
+                event.preventDefault();
+            });
+
+            canvas.addEventListener('mousedown', (event) => {
+                const startX = event.clientX;
+                const startY = event.clientY;
+                const startOffsetX = offsetX;
+                const startOffsetY = offsetY;
+
+                const mouseMoveHandler = (moveEvent) => {
+                    offsetX = startOffsetX + moveEvent.clientX - startX;
+                    offsetY = startOffsetY + moveEvent.clientY - startY;
+                    draw();
+                };
+
+                const mouseUpHandler = () => {
+                    document.removeEventListener('mousemove', mouseMoveHandler);
+                    document.removeEventListener('mouseup', mouseUpHandler);
+                };
+
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+            });
+        }
+
+        function exportToTxt(instanceIndex) {
+            const data = window[`instanceData${instanceIndex}`];
+            if (!data) return;
+
+            const content = data.path.map(index => `${data.cities[index].x},${data.cities[index].y}`).join('\n') + `\nCusto: ${data.cost}`;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `instancia_${instanceIndex + 1}.txt`;
+            link.click();
+        }
+
+        function exportToExcel(instanceIndex) {
+            const data = window[`instanceData${instanceIndex}`];
+            if (!data) return;
+
+            const workbook = XLSX.utils.book_new();
+            const sheetData = [
+                ['Cidades:', ...data.path.map((_, i) => (i + 1).toString())],
+                ['(x,y)', ...data.path.map(index => `${data.cities[index].x},${data.cities[index].y}`)],
+                ['Custo', data.cost.toString()]
+            ];
+            const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+            XLSX.utils.book_append_sheet(workbook, worksheet, `Instância ${instanceIndex + 1}`);
+
+            XLSX.writeFile(workbook, `instancia_${instanceIndex + 1}.xlsx`);
+        }
+    </script>
+</body>
+</html>

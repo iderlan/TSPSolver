@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmos de Resolução do Caixeiro Viajante</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.6;
+            max-width: 800px;
+            text-align: justify;
+        }
+
+        nav {
+            background-color: #007bff;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.8em;
+            padding: 10px 10px;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        @media (max-width: 700px) {
+              nav ul li a {
+                  padding: 10px 10px;
+               }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="https://pt.wikipedia.org/wiki/Problema_do_caixeiro-viajante" target="_blank">Problema</a></li>
+            <li><a href="https://github.com/iderlan" target="_blank">Contato</a></li>
+            <li><a href="algoritmos.html">Algoritmos</a></li>
+        </ul>
+    </nav>
+
+    <h1>Algoritmos de Resolução do Problema do Caixeiro Viajante</h1>
+
+    <div class="container">
+        <h2>Held-Karp</h2>
+        <p>
+            O algoritmo Held-Karp resolve o problema do caixeiro viajante usando programação dinâmica. Ele considera todas as cidades e calcula o caminho ótimo ao armazenar subproblemas menores em uma tabela. A principal vantagem do Held-Karp é que ele garante a solução ótima, mas sua desvantagem é que é computacionalmente pesado para um grande número de cidades, com uma complexidade de tempo de O(2^n * n²), onde n é o número de cidades.
+        </p>
+
+        <h2>Inserção Mais Barata</h2>
+        <p>
+            A heurística da Inserção Mais Barata é uma abordagem mais simples e rápida que constrói a solução adicionando cidades uma por uma no caminho, sempre inserindo a próxima cidade no local que causa o menor aumento no custo total. Embora não garanta a solução ótima, é eficiente para um número maior de cidades, sendo útil para instâncias de até 500 cidades.
+        </p>
+
+        <h2>Vizinho Mais Próximo</h2>
+        <p>
+            O algoritmo do Vizinho Mais Próximo também é uma heurística. Ele começa em uma cidade aleatória e vai construindo a rota escolhendo a cidade mais próxima que ainda não foi visitada. Esse método é rápido e fácil de implementar, mas não garante a solução ótima. É ideal para situações em que é preciso uma solução rapidamente para um grande número de cidades, como 500 ou mais.
+        </p>
+    </div>
+</body>
+</html>
