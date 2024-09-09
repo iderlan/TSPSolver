@@ -29,7 +29,7 @@ Este projeto é uma aplicação web que resolve o famoso Problema do Caixeiro-Vi
 
 1. Clone este repositório:
     ```bash
-    git clone https://github.com/seu-usuario/nome-do-repositorio.git
+    git clone https://github.com/iderlan/TSPSolver.git
     ```
 2. Abra o arquivo `index.html` em seu navegador para iniciar a aplicação.
 
